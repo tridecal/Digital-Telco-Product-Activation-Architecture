@@ -1,0 +1,28 @@
+{
+  "externalId": "ACT-EXT-100001",
+  "description": "Activate allocated resources for digital eSIM subscriber",
+  "correlationId": "demo-100001",
+  "idempotencyKey": "activation-100001",
+  "resourceOrderId": "RO-100001",
+  "activation": {
+    "action": "activate",
+    "resources": [
+      {
+        "resourceType": "MSISDN",
+        "resourceId": "MSISDN-100001",
+        "value": "9665XXXX0001"
+      },
+      {
+        "resourceType": "IMSI",
+        "resourceId": "IMSI-100001",
+        "value": "42001XXXXXXXXX"
+      },
+      {
+        "resourceType": "eSIMProfile",
+        "resourceId": "ESIM-100001",
+        "iccid": "89XXXXXXXXXXXXXXXXXX",
+        "eid": "89XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      }
+    ]
+  }
+}
