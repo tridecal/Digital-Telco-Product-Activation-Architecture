@@ -1,0 +1,104 @@
+name: Architecture & Build Validation
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate Reference Implementation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyyaml
+
+      - name: Compile Python source
+        run: |
+          python -m py_compile examples/esim-onboarding/app.py
+          python -m py_compile examples/esim-onboarding/orchestrator.py
+          python -m py_compile examples/esim-onboarding/subscriber_resources.py
+
+      - name: Validate FastAPI application
+        run: |
+          cd examples/esim-onboarding
+          python -c "from app import app; assert app.title == 'Subscriber Resource Management API'"
+
+      - name: Validate OpenAPI YAML
+        run: |
+          python - <<'PY'
+          import pathlib
+          import yaml
+
+          path = pathlib.Path(
+              "examples/esim-onboarding/openapi/subscriber-resource-api.yaml"
+          )
+
+          with path.open(encoding="utf-8") as stream:
+              spec = yaml.safe_load(stream)
+
+          assert isinstance(spec, dict), "OpenAPI document must be an object"
+          assert str(spec.get("openapi", "")).startswith("3."), \
+              "OpenAPI 3.x specification expected"
+          assert "info" in spec, "OpenAPI info section missing"
+          assert "paths" in spec, "OpenAPI paths section missing"
+
+          print(
+              f"Validated OpenAPI {spec['openapi']} "
+              f"with {len(spec['paths'])} paths"
+          )
+          PY
+
+  container:
+    name: Build Container
+    runs-on: ubuntu-latest
+    needs: validate
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build reference container
+        run: |
+          docker build \
+            --tag digital-telco-activation:ci \
+            .
+
+      - name: Start reference container
+        run: |
+          docker run -d \
+            --name digital-telco-activation \
+            -p 8000:8000 \
+            digital-telco-activation:ci
+
+      - name: Verify health endpoint
+        run: |
+          for attempt in {1..15}; do
+            if curl --fail --silent http://localhost:8000/health; then
+              echo
+              echo "Reference API is healthy"
+              exit 0
+            fi
+
+            sleep 2
+          done
+
+          docker logs digital-telco-activation
+          exit 1
