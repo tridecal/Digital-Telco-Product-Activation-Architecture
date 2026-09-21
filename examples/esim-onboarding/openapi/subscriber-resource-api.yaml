@@ -1,0 +1,404 @@
+openapi: 3.1.0
+
+info:
+  title: Subscriber Resource Management API
+  version: 1.0.0
+  description: |
+    Vendor-neutral reference API for coordinating subscriber resources
+    required during digital mobile service activation.
+
+    The API demonstrates allocation of MSISDN, IMSI and eSIM profile
+    resources while keeping subscriber-resource orchestration separate
+    from Product, Service and Resource Order domains.
+
+    This API is a project-specific architectural contract.
+    It is not an official TM Forum Open API.
+
+  contact:
+    name: Mohamed Salman
+
+tags:
+  - name: Subscriber
+    description: Subscriber resource orchestration
+  - name: MSISDN
+    description: MSISDN reservation
+  - name: IMSI
+    description: IMSI allocation
+  - name: eSIM
+    description: eSIM profile allocation
+  - name: Activation
+    description: Subscriber activation orchestration
+
+paths:
+
+  /subscriber-resources:
+    post:
+      tags:
+        - Subscriber
+      summary: Create subscriber resource context
+      operationId: createSubscriberResources
+
+      parameters:
+        - $ref: "#/components/parameters/CorrelationId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSubscriberResourcesRequest"
+
+      responses:
+        "201":
+          description: Subscriber resource context created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriberResources"
+
+        "409":
+          description: Resource context already exists
+
+  /subscriber-resources/{subscriptionId}:
+    get:
+      tags:
+        - Subscriber
+      summary: Retrieve subscriber resource context
+      operationId: getSubscriberResources
+
+      parameters:
+        - $ref: "#/components/parameters/SubscriptionId"
+        - $ref: "#/components/parameters/CorrelationId"
+
+      responses:
+        "200":
+          description: Subscriber resource context
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriberResources"
+
+        "404":
+          description: Subscriber resource context not found
+
+  /subscriber-resources/{subscriptionId}/msisdn:
+    post:
+      tags:
+        - MSISDN
+      summary: Reserve MSISDN
+      operationId: reserveMsisdn
+
+      parameters:
+        - $ref: "#/components/parameters/SubscriptionId"
+        - $ref: "#/components/parameters/CorrelationId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MSISDNReservationRequest"
+
+      responses:
+        "200":
+          description: MSISDN reserved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MSISDN"
+
+  /subscriber-resources/{subscriptionId}/imsi:
+    post:
+      tags:
+        - IMSI
+      summary: Allocate IMSI
+      operationId: allocateImsi
+
+      parameters:
+        - $ref: "#/components/parameters/SubscriptionId"
+        - $ref: "#/components/parameters/CorrelationId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+
+      responses:
+        "200":
+          description: IMSI allocated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IMSI"
+
+  /subscriber-resources/{subscriptionId}/esim-profile:
+    post:
+      tags:
+        - eSIM
+      summary: Allocate eSIM profile
+      operationId: allocateEsimProfile
+
+      parameters:
+        - $ref: "#/components/parameters/SubscriptionId"
+        - $ref: "#/components/parameters/CorrelationId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ESIMProfileRequest"
+
+      responses:
+        "200":
+          description: eSIM profile allocated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ESIMProfile"
+
+  /subscriber-resources/{subscriptionId}/activate:
+    post:
+      tags:
+        - Activation
+      summary: Activate subscriber resources
+      operationId: activateSubscriber
+
+      parameters:
+        - $ref: "#/components/parameters/SubscriptionId"
+        - $ref: "#/components/parameters/CorrelationId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+
+      responses:
+        "202":
+          description: Activation accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActivationResponse"
+
+components:
+
+  parameters:
+
+    SubscriptionId:
+      name: subscriptionId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: SUB-100001
+
+    CorrelationId:
+      name: X-Correlation-ID
+      in: header
+      required: true
+      description: Correlates the transaction across architecture domains.
+      schema:
+        type: string
+      example: demo-100001
+
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: Prevents duplicate processing of repeated requests.
+      schema:
+        type: string
+      example: allocation-100001
+
+  schemas:
+
+    CreateSubscriberResourcesRequest:
+      type: object
+      required:
+        - subscriptionId
+        - serviceOrderId
+        - simType
+      properties:
+
+        subscriptionId:
+          type: string
+          example: SUB-100001
+
+        productOrderId:
+          type: string
+          example: PO-100001
+
+        serviceOrderId:
+          type: string
+          example: SO-100001
+
+        simType:
+          type: string
+          enum:
+            - SIM
+            - eSIM
+          example: eSIM
+
+        numberSelectionMode:
+          type: string
+          enum:
+            - automatic
+            - customer-selected
+          example: automatic
+
+    SubscriberResources:
+      type: object
+      properties:
+
+        subscriptionId:
+          type: string
+          example: SUB-100001
+
+        productOrderId:
+          type: string
+          example: PO-100001
+
+        serviceOrderId:
+          type: string
+          example: SO-100001
+
+        resourceOrderId:
+          type: string
+          example: RO-100001
+
+        status:
+          type: string
+          enum:
+            - created
+            - allocating
+            - allocated
+            - activating
+            - active
+            - failed
+          example: allocated
+
+        msisdn:
+          $ref: "#/components/schemas/MSISDN"
+
+        imsi:
+          $ref: "#/components/schemas/IMSI"
+
+        esimProfile:
+          $ref: "#/components/schemas/ESIMProfile"
+
+    MSISDNReservationRequest:
+      type: object
+      properties:
+
+        selectionMode:
+          type: string
+          enum:
+            - automatic
+            - customer-selected
+          default: automatic
+
+        requestedNumber:
+          type: string
+          example: "9665XXXX0001"
+
+    MSISDN:
+      type: object
+      properties:
+
+        resourceId:
+          type: string
+          example: MSISDN-100001
+
+        value:
+          type: string
+          example: "9665XXXX0001"
+
+        status:
+          type: string
+          enum:
+            - available
+            - reserved
+            - assigned
+            - suspended
+            - released
+          example: reserved
+
+    IMSI:
+      type: object
+      properties:
+
+        resourceId:
+          type: string
+          example: IMSI-100001
+
+        value:
+          type: string
+          example: "42001XXXXXXXXX"
+
+        status:
+          type: string
+          enum:
+            - available
+            - allocated
+            - active
+            - released
+          example: allocated
+
+    ESIMProfileRequest:
+      type: object
+      properties:
+
+        profileType:
+          type: string
+          enum:
+            - consumer
+            - enterprise
+          default: consumer
+
+    ESIMProfile:
+      type: object
+      properties:
+
+        resourceId:
+          type: string
+          example: ESIM-100001
+
+        iccid:
+          type: string
+          example: "89XXXXXXXXXXXXXXXXXX"
+
+        eid:
+          type: string
+          example: "89XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+        status:
+          type: string
+          enum:
+            - available
+            - allocated
+            - downloaded
+            - enabled
+            - disabled
+            - released
+          example: allocated
+
+    ActivationResponse:
+      type: object
+      properties:
+
+        activationId:
+          type: string
+          example: ACT-100001
+
+        subscriptionId:
+          type: string
+          example: SUB-100001
+
+        status:
+          type: string
+          enum:
+            - accepted
+            - activating
+            - active
+            - failed
+          example: accepted
+
+        correlationId:
+          type: string
+          example: demo-100001
