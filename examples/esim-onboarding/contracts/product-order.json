@@ -1,0 +1,46 @@
+{
+  "externalId": "WEB-ORDER-100001",
+  "priority": "1",
+  "description": "Digital mobile subscription with eSIM activation",
+  "category": "B2C",
+  "requestedStartDate": "2026-09-21T12:00:00Z",
+  "channel": [
+    {
+      "id": "digital-web",
+      "name": "Digital Web"
+    }
+  ],
+  "relatedParty": [
+    {
+      "id": "CUST-100001",
+      "role": "customer"
+    }
+  ],
+  "productOrderItem": [
+    {
+      "id": "1",
+      "action": "add",
+      "quantity": 1,
+      "productOffering": {
+        "id": "OFFER-ESIM-001",
+        "name": "Digital Mobile eSIM"
+      },
+      "product": {
+        "productCharacteristic": [
+          {
+            "name": "simType",
+            "value": "eSIM"
+          },
+          {
+            "name": "numberSelectionMode",
+            "value": "automatic"
+          },
+          {
+            "name": "activationMode",
+            "value": "digital"
+          }
+        ]
+      }
+    }
+  ]
+}
