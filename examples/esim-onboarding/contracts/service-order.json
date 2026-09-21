@@ -1,0 +1,41 @@
+{
+  "externalId": "SO-EXT-100001",
+  "priority": "1",
+  "description": "Realize digital mobile service for eSIM subscriber",
+  "category": "Mobile",
+  "requestedStartDate": "2026-09-21T12:00:00Z",
+  "relatedParty": [
+    {
+      "id": "CUST-100001",
+      "role": "customer"
+    }
+  ],
+  "serviceOrderItem": [
+    {
+      "id": "1",
+      "action": "add",
+      "service": {
+        "name": "Digital Mobile Service",
+        "serviceType": "MobileConnectivity",
+        "serviceCharacteristic": [
+          {
+            "name": "simType",
+            "value": "eSIM"
+          },
+          {
+            "name": "numberSelectionMode",
+            "value": "automatic"
+          },
+          {
+            "name": "activationMode",
+            "value": "digital"
+          }
+        ],
+        "serviceSpecification": {
+          "id": "SERVICE-SPEC-MOBILE-001",
+          "name": "Digital Mobile Connectivity"
+        }
+      }
+    }
+  ]
+}
