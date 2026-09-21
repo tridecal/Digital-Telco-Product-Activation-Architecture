@@ -1,3 +1,100 @@
+
+<div align="center">
+
+# Digital Telco Product Activation Architecture
+
+### From Product Idea to Activated Subscriber
+
+**A vendor-neutral reference architecture for modern digital telecommunications**
+
+Product Catalog · Product Order · Service Orchestration · SIM/eSIM · MSISDN · Resource Activation · Inventory
+
+<br>
+
+[![Architecture](https://img.shields.io/badge/Architecture-Reference-blue)](#)
+[![TM Forum](https://img.shields.io/badge/TM%20Forum-Open%20APIs-blueviolet)](https://www.tmforum.org/oda/open-apis/)
+[![ODA](https://img.shields.io/badge/ODA-Aligned-success)](https://www.tmforum.org/oda/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
+[![Status](https://img.shields.io/badge/Status-Active%20Development-orange)](#)
+
+<br>
+
+**Architecture & Research by Mohamed Salman**
+
+</div>
+
+---
+
+## Executive Overview
+
+Modern digital telecom products span multiple architectural domains.
+
+A commercial proposition defined in a product catalog eventually needs to become an **activated and measurable subscriber service**, backed by service and network resources.
+
+This reference architecture explores that end-to-end journey:
+
+```mermaid
+flowchart LR
+    A["Product Idea"] --> B["Catalog"]
+    B --> C["Configure"]
+    C --> D["Order"]
+    D --> E["Service"]
+    E --> F["SIM / eSIM<br/>MSISDN"]
+    F --> G["Activate"]
+    G --> H["Inventory"]
+    H --> I["Observe"]
+    I --> J["Iterate"]
+
+    style A stroke-width:2px
+    style G stroke-width:2px
+    style J stroke-width:2px
+```
+
+The architecture applies **TM Forum Open APIs and Open Digital Architecture (ODA) principles** while remaining implementation-neutral and vendor-neutral.
+
+It focuses on the architectural boundary between:
+
+> **Commercial Product Management → Digital BSS → Service Orchestration → Subscriber Resources → Network Activation**
+
+The goal is not simply to demonstrate API integration.
+
+The goal is to explore how a telecommunications platform can make the journey from **product idea to active subscriber composable, observable, reusable and faster to evolve.**
+
+---
+
+## Architecture Scope
+
+| Domain | Key Capabilities |
+|---|---|
+| **Product** | Catalog, configuration, ordering, product inventory |
+| **Service** | Service ordering, orchestration, service inventory |
+| **Subscriber Resources** | SIM, eSIM, ICCID, IMSI, MSISDN lifecycle |
+| **Resource** | Resource ordering, allocation and inventory |
+| **Activation** | Provisioning and resource activation |
+| **Integration** | APIs, events and lifecycle orchestration |
+| **Operations** | Observability, reconciliation and failure handling |
+
+---
+
+## Standards Foundation
+
+This project draws on:
+
+**TM Forum Open Digital Architecture (ODA)**  
+**TM Forum Open APIs**  
+**TM Forum Information Framework (SID) concepts**  
+**API-first architecture**  
+**Event-driven architecture**  
+**Cloud-native architecture**
+
+> **Standards boundary:** TM Forum specifications remain authoritative. Project-specific components, lifecycle models and design decisions are explicitly identified as reference architecture concepts rather than official TM Forum definitions.
+
+---
+
+## Why This Project?
+
+
+
 # Digital Telco Product Activation Architecture
 
 > **From Product Idea to Activated Subscriber**
@@ -1036,3 +1133,34 @@ Third-party standards, specifications, trademarks and referenced materials remai
 This is an independent reference architecture and is not an official TM Forum project.
 
 TM Forum, ODA, SID and TM Forum Open API names are referenced for architectural and interoperability purposes. Refer to the official TM Forum documentation for authoritative specifications.
+
+
+
+---
+
+## Author
+
+**Mohamed Salman**  
+Solution & Enterprise Architecture · Digital Platforms · Telecommunications · Data & AI
+
+Architecture interests include digital BSS/OSS, TM Forum ODA, API architecture, cloud-native platforms, event-driven systems and emerging telecom technologies.
+
+---
+
+## License
+
+Licensed under the **Apache License 2.0**.
+
+This is an independent reference architecture. TM Forum, ODA, SID and TM Forum Open API names are referenced for architecture and interoperability purposes. Official TM Forum specifications remain the authoritative source.
+
+---
+
+<div align="center">
+
+**Digital Telco Product Activation Architecture**
+
+*From product idea to activated subscriber.*
+
+Architecture & Research · **Mohamed Salman**
+
+</div>
