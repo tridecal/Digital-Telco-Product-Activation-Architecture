@@ -1,0 +1,66 @@
+{
+  "externalId": "RO-EXT-100001",
+  "description": "Allocate subscriber resources for digital eSIM service",
+  "category": "SubscriberResource",
+  "priority": "1",
+  "requestedStartDate": "2026-09-21T12:00:00Z",
+  "relatedParty": [
+    {
+      "id": "CUST-100001",
+      "role": "customer"
+    }
+  ],
+  "resourceOrderItem": [
+    {
+      "id": "1",
+      "action": "add",
+      "resource": {
+        "name": "Subscriber MSISDN",
+        "resourceCharacteristic": [
+          {
+            "name": "allocationMode",
+            "value": "automatic"
+          }
+        ],
+        "resourceSpecification": {
+          "id": "RES-SPEC-MSISDN-001",
+          "name": "MSISDN"
+        }
+      }
+    },
+    {
+      "id": "2",
+      "action": "add",
+      "resource": {
+        "name": "Subscriber IMSI",
+        "resourceCharacteristic": [
+          {
+            "name": "allocationMode",
+            "value": "automatic"
+          }
+        ],
+        "resourceSpecification": {
+          "id": "RES-SPEC-IMSI-001",
+          "name": "IMSI"
+        }
+      }
+    },
+    {
+      "id": "3",
+      "action": "add",
+      "resource": {
+        "name": "Subscriber eSIM Profile",
+        "resourceCharacteristic": [
+          {
+            "name": "profileType",
+            "value": "consumer"
+          }
+        ],
+        "resourceSpecification": {
+          "id": "RES-SPEC-ESIM-001",
+          "name": "eSIM Profile"
+        }
+      }
+    }
+  ]
+}
